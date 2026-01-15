@@ -1,0 +1,30 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <h1>Mes rendez-vous</h1>
+
+  {% if appointments %}
+    <div class="list-group">
+      {% for a in appointments %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ a.service_type.name }}</strong> chez <em>{{ a.provider.name }}</em>
+            <div>{{ a.start|date:'DATETIME_FORMAT' }} — {{ a.end|date:'TIME_FORMAT' }}</div>
+            <div>Status: {{ a.status }}</div>
+          </div>
+          <div>
+            {% if a.status != 'cancelled' %}
+              <form method="post" action="{% url 'appointment-cancel' a.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-danger">Annuler</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Vous n'avez pas de rendez-vous.</p>
+  {% endif %}
+
+{% endblock %}

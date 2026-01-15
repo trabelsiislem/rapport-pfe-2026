@@ -1,0 +1,18 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <h1>Services disponibles</h1>
+  <div class="row">
+    {% for s in services %}
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ s.name }}</h5>
+            <p class="card-text">{{ s.description }}</p>
+            <a href="/providers/?service={{ s.pk }}" class="btn btn-primary">Voir prestataires</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

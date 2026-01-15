@@ -1,0 +1,45 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <h1>{{ provider.name }}</h1>
+  <p>{{ provider.location }}</p>
+
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" value="{{ selected_date }}" class="form-control">
+    </div>
+    <div class="col-auto">
+      <label for="service">Service</label>
+      <select name="service" id="service" class="form-select">
+        {% for s in provider.services.all %}
+          <option value="{{ s.pk }}" {% if selected_service and selected_service.pk == s.pk %}selected{% endif %}>{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-auto align-self-end">
+      <button class="btn btn-secondary">Voir</button>
+    </div>
+  </form>
+
+  <h3>Créneaux disponibles</h3>
+  {% if slots %}
+    <div class="list-group mb-4">
+      {% for slot in slots %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <div>{{ slot.0|date:'DATETIME_FORMAT' }} — {{ slot.1|date:'TIME_FORMAT' }}</div>
+          <form method="post" action="{% url 'provider-book' provider.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="service" value="{{ selected_service.pk }}">
+            <input type="hidden" name="start" value="{{ slot.0.isoformat }}">
+            <input type="hidden" name="end" value="{{ slot.1.isoformat }}">
+            <button class="btn btn-primary">Réserver</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Aucun créneau disponible pour cette date.</p>
+  {% endif %}
+
+{% endblock %}

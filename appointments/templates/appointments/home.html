@@ -1,0 +1,107 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <section class="py-5 text-white bg-dark mb-4">
+    <div class="container">
+      <h1 class="display-4">Booking</h1>
+      <p class="lead">Réservez facilement vos services locaux — médecins, salons et plus.</p>
+      <p><a class="btn btn-primary btn-lg" href="/services/">Voir les services</a></p>
+    </div>
+  </section>
+
+  <section class="py-4">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-4">
+          <h3>{{ services_count }}</h3>
+          <p>Services</p>
+        </div>
+        <div class="col-md-4">
+          <h3>{{ providers_count }}</h3>
+          <p>Prestataires</p>
+        </div>
+        <div class="col-md-4">
+          <h3>{{ appointments_count }}</h3>
+          <p>Rendez‑vous</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-4 bg-light">
+    <div class="container">
+      <h2>À propos</h2>
+      <p>Notre plateforme vous aide à trouver rapidement des prestataires locaux et à réserver des créneaux disponibles.</p>
+    </div>
+  </section>
+
+  <section class="py-4">
+    <div class="container">
+      <h2>Prestataires en vedette</h2>
+      <div class="row">
+        {% for p in providers %}
+          <div class="col-md-4 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ p.name }}</h5>
+                <p class="card-text">{{ p.location }}</p>
+                <a href="{% url 'provider-detail' p.pk %}" class="btn btn-outline-primary">Voir</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-4 bg-light">
+    <div class="container">
+      <h2>Services populaires</h2>
+      <div class="row">
+        {% for s in services %}
+          <div class="col-md-4 mb-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ s.name }}</h5>
+                <p class="card-text">{{ s.description|truncatechars:120 }}</p>
+                <a href="/providers/?service={{ s.pk }}" class="btn btn-outline-primary">Voir prestataires</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-4">
+    <div class="container">
+      <h2>Contact</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Nom</label>
+              {{ form.name }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              {{ form.email }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              {{ form.message }}
+            </div>
+            <button class="btn btn-primary">Envoyer</button>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <h5>Contactez‑nous</h5>
+          <p>Adresse: Hammamet, Tunisia</p>
+          <p>Email: contact@example.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
